@@ -1,40 +1,22 @@
-import {ServerResponse} from "http";
 import {usersArray} from "../main";
-import {v4 as uuidv4, validate} from 'uuid';
-import {UserType} from "../userRepo";
+import {validate} from 'uuid';
+import {ResponseObjectType} from "../helpers";
 
 
-export function getHandler(res: ServerResponse, userId?: string) {
-    console.log('get')
+export async function getHandler(userId?: string): Promise<ResponseObjectType> {
+    console.log('get handler')
     if (!userId) {
-        res.writeHead(201, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify(usersArray));
+        return {code: 201, body: usersArray}
     } else {
         if (!validate(userId)) {
-            res.writeHead(400, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({
-                message: 'userId is invalid (not uuid)',
-            }));
+            return {code: 400, body: 'userId is invalid (not uuid)'}
         } else {
-            const userIsFound = usersArray.filter((el) => {
-                return el.id == userId
+            const user = usersArray.find((el) => {
+                return el.id === userId
             })
-            console.log(userIsFound, ' is found')
-            if (!userIsFound[0]) {
-                res.writeHead(404, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({
-                    message: 'userId is not found',
-                }));
-            } else {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify(userIsFound[0]));
-            }
-
+            return (!user)
+                ? {code: 404, body: 'userId is not found'}
+                : {code: 200, body: user}
         }
-
     }
-
-    if (userId) console.log('userId = ', userId)
-
-
 }

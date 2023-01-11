@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev:start": "yarn nodemon dist/main.js",
-    "dev:watch": "tsc src/main.ts --watch"
+    "dev:watch": "tsc src/main.ts --watch",
+    "dev:startnode": "ts-node src/main.ts "
   }
 }
