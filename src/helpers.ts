@@ -41,12 +41,12 @@ export async function parseId(req: IncomingMessage) {
     return parsedURL[2]
 }
 
-export async function requestBody(req: IncomingMessage) {
+export async function parseRequestBody(req: IncomingMessage) {
     let buffers = [];
     for await (const chunk of req) {
         buffers.push(chunk);
     }
-    return JSON.parse(Buffer.concat(buffers).toString())
+    return (buffers.length == 0) ? '' : JSON.parse(Buffer.concat(buffers).toString())
 
     // let body = "";
     // req.on("data", async (chunk) => {
@@ -71,25 +71,9 @@ export function stringIsAValidUrl(str: string) {
     }
 };
 
-// validate body
-export const validatePostBody = (data: any) => {
-    console.log('1 ', typeof  data)
-    console.log('2', typeof data === 'object')
-    return data !== null
-        && typeof data === 'object'
-        && 'username' in data
-        && 'age' in data
-        && 'hobbies' in data
-        && typeof data.username === 'string'
-        && typeof data.age === 'number'
-        && Array.isArray(data.hobbies)
-        && data.hobbies.every(function (element: any) {
-            return typeof element === 'string'
-        })
-}
 
 export async function serveRoute(routeMethod: string, userId: string, body: any): Promise<ResponseObjectType> {
-    let res:ResponseObjectType
+    let res: ResponseObjectType
     switch (routeMethod) {
         case 'GET' :
             res = await getHandler(userId)
@@ -104,7 +88,7 @@ export async function serveRoute(routeMethod: string, userId: string, body: any)
             res = await deleteHandler(userId)
             break;
         default:
-            res =  {code: 404, body: "Invalid request method"}
+            res = {code: 404, body: "Invalid request method"}
             break;
     }
     return res

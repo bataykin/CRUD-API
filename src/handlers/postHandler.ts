@@ -1,11 +1,11 @@
 import {UserType} from "../userRepo";
 import {usersArray} from "../main";
 import {v4 as uuidv4} from 'uuid';
-import {ResponseObjectType, validatePostBody} from "../helpers";
+import {ResponseObjectType} from "../helpers";
+import {validatePostBody} from "../validators/createBodyValidator";
+
 
 export async function postHandler(body: any): Promise<ResponseObjectType> {
-    console.log('post handler')
-
     const validUser = validatePostBody(body)
     if (!validUser) {
         return {code: 400, body: 'Not valid user data'}

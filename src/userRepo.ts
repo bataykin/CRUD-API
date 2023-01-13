@@ -10,3 +10,9 @@ export type UserInputType = {
     age: number,
     hobbies: string[]
 }
+
+export type  UserUpdateType = {
+    username: string,
+    age: number,
+    hobbies: string[]
+}
