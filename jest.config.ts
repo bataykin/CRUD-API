@@ -4,6 +4,8 @@
  */
 
 export default {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -154,8 +156,8 @@ export default {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
-    "**/tests/**/*.[jt]s?(x)",
-    "**/?(*.)+(spec|test).[tj]s?(x)"
+    "**/tests/**/*.[t]s?(x)",
+    "**/?(*.)+(spec|test).[t]s?(x)"
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped

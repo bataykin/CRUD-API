@@ -1,6 +1,12 @@
 # CRUD-API
 Simple crud-api on native nodejs
 
+To install run:
+1. 'yarn install' in the console
+2. run 'build' script in package.json
+3. run 'start:prod' script in package.json
+
+
 Assignment: CRUD API
 Description
 

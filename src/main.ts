@@ -3,11 +3,13 @@ import * as http from 'node:http';
 import {IncomingMessage, Server, ServerResponse} from "http";
 import {UserType} from "./userRepo";
 import {parseId, parseRequestBody, ResponseObjectType, sendResponse, serveRoute,} from './helpers';
+import cluster from "cluster";
+import * as os from "os";
 
 dotenv.config()
 export let usersArray: Array<UserType> = []
-const server: Server = http.createServer();
-const BASEURL: string = 'api/users'
+export const server: Server = http.createServer();
+export const BASEURL: string = 'api/users'
 
 
 server.on('request', async (req: IncomingMessage, res: ServerResponse) => {
@@ -31,16 +33,43 @@ server.listen(process.env.PORT || 5000, () => {
     console.log(`Server ${BASEURL} started on port=${process.env.port}, PID=${process.pid}, ${__filename}`)
 });
 
-server.on('error', async (err: Error, res: ServerResponse) => {
-    try {
-        await sendResponse({code: 500, body: 'Something went wrong'}, res)
-    } catch (e) {
-        console.log(e)
-    } finally {
-        console.log('Server error: ', err)
-    }
-})
+// server.on('error', async (err: Error, res: ServerResponse) => {
+//     try {
+//         await sendResponse({code: 500, body: 'Something went wrong'}, res)
+//     } catch (e) {
+//         console.log(e)
+//     } finally {
+//         console.log('Server error: ', err)
+//     }
+// })
 
 server.on('clientError', (err: Error, socket: ServerResponse) => {
     socket.end('HTTP/1.1 400 Bad Request\r\n\r\n')
 })
+
+
+if (cluster.isPrimary) {
+    const cpusCount = os.cpus().length
+    let portNumber: number = +process.env.PORT! || 5000
+    console.log(`Primary process on PORT=${portNumber} `)
+
+    for (let i = 0; i < cpusCount; i++) {
+        portNumber++
+        const proc = cluster.fork({PORT: portNumber})
+        proc.on('message', function (message) {
+            console.log('message from child: ', message);
+            proc.send('Hello from master!');
+        });
+        proc.send(usersArray)
+        cluster.worker?.send('hello from the master');
+        cluster.setupPrimary()
+    }
+} else {
+    // process.send('Hello from Child!');
+
+    process.on('message', function(message) {
+        console.log('message from master: ', message);
+    });
+
+    // console.log(`Worker started at PORT=${process.env.PORT} PID=${process.pid} ID=${cluster.worker?.id}`)
+}
