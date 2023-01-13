@@ -2,3 +2,4 @@
 /dist
 *.js
 *.js.map
+/.env

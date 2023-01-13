@@ -4,8 +4,9 @@ import {usersArray} from "../main";
 import {ResponseObjectType} from "../helpers";
 import {validateUpdateBody} from "../validators/updateBodyValidator";
 
-function updateUser(user: UserInputType, body: any) {
+function updateUser(user: UserInputType, body: UserInputType) {
     for (const userKey in user) {
+        // @ts-ignore
         user[userKey] = body[userKey] || user[userKey]
     }
 }

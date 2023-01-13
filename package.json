@@ -17,10 +17,11 @@
   },
   "scripts": {
     "dev:start": "ts-node src/main",
-    "build": "rm -rf ./js/ && tsc",
-    "start:dev": "nodemon ./src/main.ts",
-    "start:prod": "node ./dist/main.js",
-    "test": "jest"
+    "build": "tsc",
+    "start:dev": "cross-env NODE_ENV=DEV nodemon ./src/main.ts",
+    "start:prod": "node ./dist/src/main.js",
+    "test": "jest",
+    "deletejs": "find . -name \"*.js\"  -type f"
   },
   "rootDir": "src"
 }

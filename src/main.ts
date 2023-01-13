@@ -11,7 +11,8 @@ const BASEURL: string = 'api/users'
 
 
 server.on('request', async (req: IncomingMessage, res: ServerResponse) => {
-    console.log(`New incoming ${req.method}-request from ${req.headers.host}${req.url}, PID=${process.pid}`)
+    if (process.env.NODE_ENV === 'DEV')
+        console.log(`New incoming ${req.method}-request from ${req.headers.host}${req.url}, PID=${process.pid}`)
     const parsedURL: Array<string> = req.url!.split('/').slice(1)
     if (parsedURL[0] + '/' + parsedURL[1] !== BASEURL) {
         return await sendResponse({code: 404, body: 'Wrong URL'}, res)
@@ -20,13 +21,13 @@ server.on('request', async (req: IncomingMessage, res: ServerResponse) => {
     const body: any = await parseRequestBody(req)
     const result: ResponseObjectType = await serveRoute(req.method as string, userId, body)
     await sendResponse(await result, res)
-    });
+});
 
 process.on('uncaughtException', function (err) {
     console.log(err);
 });
 
-server.listen(  process.env.PORT || 5000, () => {
+server.listen(process.env.PORT || 5000, () => {
     console.log(`Server ${BASEURL} started on port=${process.env.port}, PID=${process.pid}, ${__filename}`)
 });
 
