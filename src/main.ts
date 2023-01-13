@@ -52,6 +52,7 @@ if (cluster.isPrimary) {
     const cpusCount = os.cpus().length
     let portNumber: number = +process.env.PORT! || 5000
     console.log(`Primary process on PORT=${portNumber} `)
+    const forkedClusters = []
 
     for (let i = 0; i < cpusCount; i++) {
         portNumber++
