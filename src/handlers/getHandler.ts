@@ -4,6 +4,7 @@ import {ResponseObjectType} from "../helpers";
 
 
 export async function getHandler(userId?: string): Promise<ResponseObjectType> {
+
     if (!userId) {
         return {code: 201, body: usersArray}
     } else {
