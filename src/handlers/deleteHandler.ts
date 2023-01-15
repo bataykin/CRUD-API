@@ -14,7 +14,6 @@ export async function deleteHandler(userId: string): Promise<ResponseObjectType>
         const index = usersArray.findIndex((el) => {
             return el.id == userId
         })
-        // Object.assign(usersArray, usersArray.splice(index, 1))
         usersArray.splice(index, 1)
         return {code: 204, body: 'User deleted successfully'}
     }

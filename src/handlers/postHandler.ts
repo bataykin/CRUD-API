@@ -1,4 +1,4 @@
-import {UserType} from "../userRepo";
+import {UserType} from "../userTypes";
 import {usersArray} from "../main";
 import {v4 as uuidv4} from 'uuid';
 import {ResponseObjectType} from "../helpers";

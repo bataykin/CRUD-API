@@ -4,9 +4,8 @@ import {ResponseObjectType} from "../helpers";
 
 
 export async function getHandler(userId?: string): Promise<ResponseObjectType> {
-
     if (!userId) {
-        return {code: 201, body: usersArray}
+        return {code: 200, body: usersArray}
     } else {
         if (!validate(userId)) {
             return {code: 400, body: 'userId is invalid (not uuid)'}
@@ -16,7 +15,7 @@ export async function getHandler(userId?: string): Promise<ResponseObjectType> {
             })
             return (!user)
                 ? {code: 404, body: 'userId is not found'}
-                : {code: 200, body: (user)}
+                : {code: 200, body: user}
         }
     }
 }

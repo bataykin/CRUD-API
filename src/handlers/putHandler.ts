@@ -1,5 +1,5 @@
 import {validate} from 'uuid';
-import {UserInputType} from "../userRepo";
+import {UserInputType} from "../userTypes";
 import {usersArray} from "../main";
 import {ResponseObjectType} from "../helpers";
 import {validateUpdateBody} from "../validators/updateBodyValidator";

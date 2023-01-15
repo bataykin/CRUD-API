@@ -8,33 +8,12 @@ export async function sendResponse(resObject: ResponseObjectType, res: ServerRes
     res.statusCode = resObject.code
     res.setHeader('Content-Type', 'application/json')
     return res.end(JSON.stringify(resObject.body))
-
-
 }
 
 export type ResponseObjectType = {
     code: number
     body: any
 }
-
-// export async  function serveRequest(reqMethod: string, userId?: string, body?: any) {
-//     switch (reqMethod) {
-//         case 'GET' :
-//             await getHandler(userId);
-//             break;
-//         case 'POST' :
-//             await postHandler(req, res);
-//             break;
-//         case 'PUT' :
-//             await putHandler(req, res, parsedURL[2])
-//             break;
-//         case 'DELETE' :
-//             await deleteHandler(parsedURL[2])
-//             break;
-//         default:
-//             console.log('Unexpected HTTP-method')
-//     }
-// }
 
 export async function parseId(req: IncomingMessage) {
     const parsedURL: Array<string> = req.url!.split('/').slice(1)
@@ -47,29 +26,7 @@ export async function parseRequestBody(req: IncomingMessage) {
         buffers.push(chunk);
     }
     return (buffers.length == 0) ? '' : JSON.parse(Buffer.concat(buffers).toString())
-
-    // let body = "";
-    // req.on("data", async (chunk) => {
-    //     body += chunk; // convert Buffer to string
-    // });
-    // req.on("end", async () => {
-    //     const result = await JSON.parse(body);
-    //     // console.log(result);
-    //     return result
-    //     // req.emit('close');
-    // });
 }
-
-export function stringIsAValidUrl(str: string) {
-    console.log('stringIsAValidUrl = ', str)
-    try {
-        new URL(str);
-        return true;
-    } catch (err) {
-        console.log(err)
-        return false;
-    }
-};
 
 
 export async function serveRoute(routeMethod: string, userId: string, body: any): Promise<ResponseObjectType> {
